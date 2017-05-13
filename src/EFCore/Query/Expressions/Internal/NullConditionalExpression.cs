@@ -128,9 +128,10 @@ namespace Microsoft.EntityFrameworkCore.Query.Expressions.Internal
             var newCaller = visitor.Visit(Caller);
             var newAccessOperation = visitor.Visit(AccessOperation);
 
-            if (newNullableCaller != NullableCaller
+            if ((newNullableCaller != NullableCaller
                 || newCaller != Caller
                 || newAccessOperation != AccessOperation)
+                    && (newAccessOperation as NullConditionalExpression)?.AccessOperation != AccessOperation)
             {
                 return new NullConditionalExpression(
                     newNullableCaller, newCaller, newAccessOperation);
